@@ -1,6 +1,27 @@
 1. 密码策略
 ```bash
+# 编辑 nano /etc/security/pwquality.conf
+# 修改:
+minlen = 8
+dcredit = -1
+ucredit = -1
+lcredit = -1
+ocredit = -1
 
+# 如果有 取消前面的注释即可
+
+# 或者编辑 nano /etc/pam.d/system-auth
+# 添加或修改下行:
+password requisite pam_pwquality.so retry=3 minlen=8 dcredit=-1 ucredit=-1 lcredit=-1 ocredit=-1
+
+# 解释
+1. minlen: 设置密码的最小长度
+2. dcredit: 需要数字字符的数量(负值)
+3. ucredit: 需要大写字母的数量(负值)
+4. lcredit: 需要小写字母的数量(负值)
+5. ocredit: 需要特殊字符的数量(负值)
+6. enforce_for_root: 确保即使是root用户设置密码，也应强制执行复杂性策略。
+7. minclass=3至少包含小写字母、大写字母、数字、特殊字符等4类字符中等3类
 ```
 
 ## Nginx安全策略
