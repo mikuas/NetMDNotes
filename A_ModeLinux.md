@@ -139,18 +139,18 @@ user www;
 
 # 如过不能重启把 /etc/selinux/config 里的SELINUX设置为 SELINUX=disable 
 
-# 还不行就重启系统
+# 还不行就重启系统, 重启前ssh服务需开机自启
 
 # 验证
 sudo netstat -anltp | grep 2222
 
 ```
-    
+
 ### 2. ssh禁止root用户远程登录
 ```bash
 # 找到 PermitRootLogin 改为 no 有注释取消注释
 ```
-    
+
 ### 3. 设置root用户的计划任务, 每天早上7:50自动开启ssh服务, 22:50关闭,每周六的7:30重新启动ssh服务
 ```bash
 # crontab -e 添加:
@@ -163,28 +163,28 @@ sudo netstat -anltp | grep 2222
 # 查看
 crontab -l
 ```
-    
+
 ### 4. 修改SSHD的PID档案存放地
 ```bash
 # 找到 PidFile /var/run/sshd.pid 取消前面的注释(vi|vim的/PidFile可快速查找)
 ```
-    
+
 ## VSFTPD服务加固
-    
+
 ### 1. 设置运行vsftpd的非特权系统用户为pyftp
 ```bash
 # 编辑 /etc/vsftpd/vsftpd.conf
 
 # 找到 nopriv_user=ftpsecure 改为 pyftp
 ```
-    
+
 ### 2. 限制客户端连接的端口范围在50000-60000
 ```bash
 # 找到或在文件底部添加:
 pasv_min_port=50000 # 被动模式使用的最小端口号
 pasv_max_port=60000 # 被动模式使用的最大端口号
 ```
-    
+
 ### 3. 限制本地用户登录活动范围限制在home目录
 ```bash
 # 找到chroot_local_user 改为YES 有注释取消注释
@@ -199,7 +199,7 @@ iptables -A FORWARD -p all -j ACCEPT
 # 阻止 ICMP 协议的转发
 iptables -A FORWARD -p icmp -j DROP
 ```
-    
+
 ### 2. 为防止SSH服务被暴力枚举，设置iptables防火墙策略仅允许172.16.10.0/24网段内的主机通过SSH连接本机；
 ```bash
 # 允许来自 172.16.10.0/24 网段的 SSH 连接
